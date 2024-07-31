@@ -56,6 +56,24 @@ BEGIN
 	DECLARE @TEST_TRIGGER_ID INT, @Delete_ID INT
 	SELECT @TEST_TRIGGER_ID = ID FROM inserted
 	SELECT @Delete_ID = ID FROM deleted
-
+	
+	IF((@TEST_TRIGGER_ID IS NOT NULL) AND (@Delete_ID IS NOT NULL))
+	BEGIN
+		INSERT Table_Name_Log(Event_Table_name_id, Event_Text, Event_Date)
+		VALUES(@TEST_TRIGGER_ID, 'UPDATE LOG', GETDATE())
+	END
+	ELSE IF(@TEST_TRIGGER_ID IS NOT NULL)
+	BEGIN
+		INSERT Table_Name_Log(Event_Table_name_id, Event_Text, Event_Date)
+		VALUES(@TEST_TRIGGER_ID, 'UPDATE LOG', GETDATE())
+	END
+	ELSE
+		SELECT @Delete_ID = TEST_TRIGGER_ID FROM deleted
+		IF(@Delete_ID IS NOT NULL)
+		DELETE ID
+		DELETE LOG
+		END
+		END
+		
 
 select * from Table_Name_Log
